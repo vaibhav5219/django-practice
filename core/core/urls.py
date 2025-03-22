@@ -30,6 +30,7 @@ urlpatterns = [
     path('login/', login_page, name='login_page'),
     path('register/', register, name="register"),
     path('logout/', logout_user, name='logout_user'),
+    path('djmiddleware/', include('djmiddleware.urls')),
 ]
 
 
