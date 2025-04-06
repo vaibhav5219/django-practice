@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     # 'populate_books',
     'textsearch',
     'django.contrib.postgres',
+    'djmiddleware',
+    'imageresizer',
 ]
 
 MIDDLEWARE = [
@@ -53,7 +55,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'core.middleware.middleware.IPBlockingMiddleware' # custom middleware
+    # 'core.middleware.middleware.IPBlockingMiddleware', # custom middleware
+    # 'middleware.middleware.IPBlockingMiddleware',
+    # 'middleware.middleware.CheckBmpHeader',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -80,23 +84,23 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'search',
-            'USER': 'postgres',
-            'PASSWORD': 'root',
-            'HOST': 'localhost',
-            'PORT': '5432',
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
+
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'NAME': 'search',
+#             'USER': 'postgres',
+#             'PASSWORD': 'root',
+#             'HOST': 'localhost',
+#             'PORT': '5432',
+#         }
+# }
 
 
 # Password validation
