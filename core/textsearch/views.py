@@ -2,9 +2,12 @@ from django.shortcuts import render
 from textsearch.models import TextSearchProduct
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity # type: ignore
 from django.db.models import Q
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 # Create your views here.
 
+# @cache_page(60 * 15)
 def index(request):
     search = request.GET.get('search')
 
@@ -84,8 +87,22 @@ def index(request):
         results = results.filter(
             brand = request.GET.get('category')
         )
-
-    brands = TextSearchProduct.objects.all().distinct('brand').order_by('brand')
-    categories = TextSearchProduct.objects.all().distinct('category').order_by('category')
+    
+    
+    if cache.get('brands'):
+        brands = cache.get('brands')
+        print("FROM CACHE")
+    else:
+        cache.set("brands", TextSearchProduct.objects.all().distinct('brand').order_by('brand'), 60 * 10 )
+        brands = TextSearchProduct.objects.all().distinct('brand').order_by('brand')
+    
+    # Deleting cache => cache.delete("key")
+    
+    if cache.get('categories'):
+        categories = cache.get('categories')
+        print("FROM CACHE")
+    else:
+        cache.set("categories", TextSearchProduct.objects.all().distinct('category').order_by('category'), 60 * 10 )       
+        categories = TextSearchProduct.objects.all().distinct('category').order_by('category')
 
     return render(request, 'index.html', { 'results' : results, 'search': search, 'brands': brands, 'categories': categories})

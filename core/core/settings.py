@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'djmiddleware',
     'imageresizer',
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,13 @@ MIDDLEWARE = [
     # 'core.middleware.middleware.IPBlockingMiddleware', # custom middleware
     # 'middleware.middleware.IPBlockingMiddleware',
     # 'middleware.middleware.CheckBmpHeader',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+]
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -84,23 +92,23 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 # DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#             'NAME': 'search',
-#             'USER': 'postgres',
-#             'PASSWORD': 'root',
-#             'HOST': 'localhost',
-#             'PORT': '5432',
-#         }
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
 # }
+
+DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'search',
+            'USER': 'postgres',
+            'PASSWORD': 'root',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+}
 
 
 # Password validation
@@ -144,3 +152,21 @@ STATIC_ROOT = 'static/'      # Directory for collected static files
 
 MEDIA_URL = '/media/'                   # URL for uploaded files	
 MEDIA_ROOT = 'media/'         # Directory for uploaded media files	
+
+
+''' 
+Also need Memurai for windows redis
+For creating cash table -
+pip install django-redis
+
+python manage.py createcachetable
+'''
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",  # ✅ Correct path
+        "LOCATION": "redis://127.0.0.1:6379/1",      # Update if needed
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
