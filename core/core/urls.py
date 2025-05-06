@@ -32,6 +32,9 @@ urlpatterns = [
     path('logout/', logout_user, name='logout_user'),
     path('djmiddleware/', include('djmiddleware.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
+    
+    path('elastic_search/', include('elasticsearch_app.urls')),
+    path('scrapper/', include('scraper.urls')),
 ]
 
 

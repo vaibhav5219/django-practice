@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from home.utils import *
+from django.db.models import Index # in django 5
 
 class College(models.Model):
     College_name = models.CharField(max_length = 255)
@@ -77,7 +78,10 @@ class Skills(models.Model):
     class Meta:
         db_table = "skills"
         unique_together = ('skill_name', 'is_soft_skill',)
-        index_together = ('skill_name', 'is_soft_skill',)
+        # index_together = ('skill_name', 'is_soft_skill',)
+        indexes = [
+            Index(fields=['skill_name', 'is_soft_skill']),
+        ]
 
 
 class Person(models.Model):

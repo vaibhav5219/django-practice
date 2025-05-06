@@ -46,6 +46,12 @@ INSTALLED_APPS = [
     'djmiddleware',
     'imageresizer',
     "debug_toolbar",
+    'cronjob',
+    'django_crontab', # will work in ubuntu
+    'elasticsearch_app',
+    'django_elasticsearch_dsl',
+    'scraper',
+    'django_celery_beat', # Will work in ubuntu
 ]
 
 MIDDLEWARE = [
@@ -170,3 +176,71 @@ CACHES = {
         }
     }
 }
+
+''' Will work in ubuntu 
+pip install django-crontab
+python manage.py crontab add 
+'''
+CRONJOBS = [
+    ('*/1 * * * *', 'cronjob.cron.my_scheduled_job')
+]
+
+
+# CRONJOBS = [
+#     ('*/5 * * * *', 'myapp.cron.other_scheduled_job', ['arg1', 'arg2'], {'verbose': 0}),
+#     ('0   4 * * *', 'django.core.management.call_command', ['clearsessions']),
+# ]
+
+'''
+Installation and Configuration of elastic search 
+1> pip install django-elasticsearch-dsl
+2> Configure in settings.py
+3> Mention in installed_app
+4> Create documents.py
+5> run python manage.py search_index '--create','--populate', '--delete' or '--rebuild' .
+
+After running C:\\elasticsearch-9.0.0\\bin\\elasticsearch.bat using cmd admin
+And browse - http://localhost:9200/products/_search?q=fashion
+'''
+# ELASTICSEARCH_DSL={
+#     'default': {
+#         'hosts': 'https://localhost:9200',
+#         'basic_auth': ('elastic', 'search'),
+#         'verify_certs' : False,
+#         'ssl_show_warn' : False,
+#         'ca_certs' : r'C:\\Program Files\\elasticsearch-9.0.0\\elasticsearch-9.0.0\\config\\certs',
+#     }
+# }
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://localhost:9200',
+        # 'http_auth': ('elastic', 'search'),
+        # 'verify_certs': False,  # or use 'ca_certs': 'path/to/http_ca.crt'
+    },
+}
+
+''' CELERY Configuration Setup-
+1. Install Redis(Memurai in windows) and celery
+2. Create CELERY setup in celery.py file
+3. Import CELERY in __init__.py file
+4. Also intall eventlet (For windows users only )
+4. Add Below lines in settings.py file 
+5. command =>>>>  celery -A core worker -l INFO -P eventlet   ## core is the project name - FOr windows
+                  celery -A core worker --loglevel=info
+'''
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+''' CELERY BEAT CONFIGURATION ( Will not work in windows )
+1. pip install django-celery-beat
+2. Add app in settings.py =>  'django_celery_beat',
+3. Run command => python manage.py migrate django_celery_beat
+4. Create Task
+5. Run CELERY
+6. RUN CELERY BEAT => celery -A [project-name] beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+'''
