@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django_elasticsearch_dsl',
     'scraper',
     'django_celery_beat', # Will work in ubuntu
+    'rabbit_mq_app',
 ]
 
 MIDDLEWARE = [

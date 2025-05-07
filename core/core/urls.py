@@ -35,6 +35,7 @@ urlpatterns = [
     
     path('elastic_search/', include('elasticsearch_app.urls')),
     path('scrapper/', include('scraper.urls')),
+    path('rabbit-mq-app/', include('rabbit_mq_app.urls')),
 ]
 
 
