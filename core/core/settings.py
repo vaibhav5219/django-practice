@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'scraper',
     'django_celery_beat', # Will work in ubuntu
     'rabbit_mq_app',
+    'kafka_zookeeper_app',
 ]
 
 MIDDLEWARE = [
